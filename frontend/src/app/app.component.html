@@ -1,0 +1,22 @@
+
+
+
+<mat-toolbar>
+    <span>SQL Query App</span>
+</mat-toolbar>
+
+<mat-sidenav-container autosize>
+  <mat-sidenav mode="side" opened>
+    <mat-list role="list">
+      <a mat-list-item routerLink="conditions" >Query from conditions</a>
+      <a mat-list-item routerLink="trials" >Query from trials</a>
+    </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+   <div style="height: 88vh;">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+
+
+</mat-sidenav-container>

@@ -1,0 +1,158 @@
+<div style="flex-direction: columns;">
+  <div style="flex-direction: row; display: flex;">
+  <div>
+    <mat-card style="width:300px; height: 700px; margin: 20px 20px 0">
+      <mat-card-content>
+        <div>
+          <h1>Query inputs</h1>
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>OR</mat-label>
+              <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto1" [(ngModel)]="selectedOR">
+              <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFn" >
+                <mat-option *ngFor="let option of filteredOR | async" [value]="option" (click)="setSelectedOR(selectedOR)">
+                  {{option.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
+
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Driver</mat-label>
+              <input type="text" matInput [formControl]="myControl_Driver" [matAutocomplete]="auto2" [(ngModel)]="selectedDriver">
+              <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn" >
+                <mat-option *ngFor="let option of filteredDriver | async" [value]="option" (click)="setSelectedDriver(selectedDriver)">
+                  {{option.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
+
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Reporter</mat-label>
+              <input type="text" matInput [formControl]="myControl_Reporter" [matAutocomplete]="auto3" [(ngModel)]="selectedReporter">
+              <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFn" >
+                <mat-option *ngFor="let option of filteredReporter | async" [value]="option" (click)="setSelectedReporter(selectedReporter)">
+                  {{option.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
+
+          <button mat-raised-button color="primary" (click)="postSamescale_plot()">Submit</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+
+
+  <div style="display: flex; flex-direction: column; align-items: stretch;">
+
+      <mat-card style="width:600px; height: 700px; margin: 20px 20px 20px">
+
+
+        <mat-card-content>
+
+          <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="100ms">
+            <mat-tab label="Plots">
+              <div style="display: flex; flex-direction: column; align-items: stretch; margin: 10px 0 0;">
+                <div>
+                  <h1>Samescale Summary Output</h1>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                  <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Plot</mat-label>
+                      <mat-select [(value)]="selectedPlot">
+                        <mat-option *ngFor="let option of Plot_options" [value]="option" (click)="setSelectedPlot(selectedPlot)">
+                          {{option.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </form>
+                  <div style="display: flex; align-items: center; justify-content: center;">
+                    <img src={{imagePath}} width="100%" height="auto"/>
+                  </div>
+                </div>
+              </div>
+
+
+            </mat-tab>
+
+
+
+
+
+            <mat-tab label="Tables">
+              <div style ="margin: 20px 0 0;">
+                  <h1>Samescale Table Output</h1>
+              </div>
+              <section class="example-container mat-elevation-z8" style=" height: 500px; overflow: auto;" tabindex="0">
+
+
+              <table mat-table [dataSource]="table_formatted">
+
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="short_cond_names">
+                  <th mat-header-cell *matHeaderCellDef> Short names </th>
+                  <td mat-cell *matCellDef="let element"> {{element.short_cond_names}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="odorant">
+                  <th mat-header-cell *matHeaderCellDef> Odorant </th>
+                  <td mat-cell *matCellDef="let element"> {{element.odorant}} </td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="max_zscore">
+                  <th mat-header-cell *matHeaderCellDef> Z_score </th>
+                  <td mat-cell *matCellDef="let element"> {{element.max_zscore}} </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+              </section>
+
+
+              <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; margin: 20px 0 0;">
+                    <button mat-raised-button color="primary" (click)="getDataTable()" >Export formatted data</button>
+                    <button mat-raised-button color="primary" (click)="getDataTableRaw()">Export raw data</button>
+              </div>
+            </mat-tab>
+
+          </mat-tab-group>
+
+
+
+
+
+        </mat-card-content>
+      </mat-card>
+
+  </div>
+
+
+</div>
+  <div>
+      <mat-card style="width:940px; height: 180px; margin: 0 20px 0">
+        <mat-card-content>
+          <div>
+            <h1>SQL Query</h1>
+            {{Query}}
+          </div>
+          <button mat-raised-button color="primary" [cdkCopyToClipboard]="Query">
+            &#xF290; Copy to clipboard
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+</div>
+
+
