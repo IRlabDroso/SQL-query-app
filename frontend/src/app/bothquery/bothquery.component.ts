@@ -25,11 +25,11 @@ function delay(ms: number) {
 }
 
 @Component({
-  selector: 'app-conditions',
-  templateUrl: './conditions.component.html',
-  styleUrls: ['./conditions.component.css']
+  selector: 'app-bothquery',
+  templateUrl: './bothquery.component.html',
+  styleUrls: ['./bothquery.component.css']
 })
-export class ConditionsComponent {
+export class BothqueryComponent {
 
   constructor(private http: HttpClient, private apiService: ApiService){ }
 
@@ -57,6 +57,19 @@ export class ConditionsComponent {
   filteredReporter!: Observable<User[]>;
   selectedReporter: any=null;
 
+  // Odorant //
+  myControl_Odorant = new FormControl<string | User>('');
+  //Reporter_options : User[] = [{name: 'GCaMP7F'}, {name: 'GFP'}];
+  Odorant_options: User[] = [];
+  filteredOdorant!: Observable<User[]>;
+  selectedOdorant: any=null;
+
+  // Dilution //
+  myControl_Dilution = new FormControl<string | User>('');
+  //Reporter_options : User[] = [{name: 'GCaMP7F'}, {name: 'GFP'}];
+  Dilution_options: User[] = [];
+  filteredDilution!: Observable<User[]>;
+  selectedDilution: any=null;
 
   // Plot selection //
   myControl_Plot = new FormControl<string | User>('');
@@ -84,6 +97,17 @@ export class ConditionsComponent {
       }
     });
 
+    this.apiService.getOdorants().subscribe(levelOBJ => {
+      for (let value of levelOBJ) {
+        this.Odorant_options.push({name: value as string})
+      }
+    });
+
+    this.apiService.getDilutions().subscribe(levelOBJ => {
+      for (let value of levelOBJ) {
+        this.Dilution_options.push({name: value as string})
+      }
+    });
 
   }
 
@@ -115,6 +139,22 @@ export class ConditionsComponent {
         }),
   );
 
+  this.filteredOdorant = this.myControl_Odorant.valueChanges.pipe(
+        startWith(''),
+        map(value => {
+          const name = typeof value === 'string' ? value : value?.name;
+          return name ? this._filterOdorant(name as string) : this.Odorant_options.slice();
+        })
+
+  );
+
+  this.filteredDilution = this.myControl_Dilution.valueChanges.pipe(
+        startWith(''),
+        map(value => {
+          const name = typeof value === 'string' ? value : value?.name;
+          return name ? this._filterDilution(name as string) : this.Dilution_options.slice();
+        }),
+  );
 
   }
 
@@ -125,6 +165,17 @@ export class ConditionsComponent {
     this.apiService.getQuery(this.selectedOR.name,this.selectedDriver,this.selectedReporter).subscribe(QueryOBJ => {
     this.Query = QueryOBJ
     })
+    this.apiService.getOdorants(this.selectedOR.name).subscribe(levelOBJ => {
+      for (let value of levelOBJ) {
+        this.Odorant_options.push({name: value as string})
+      }
+    });
+
+    this.apiService.getDilutions(this.selectedOR.name).subscribe(levelOBJ => {
+      for (let value of levelOBJ) {
+        this.Dilution_options.push({name: value as string})
+      }
+    });
   }
 
   setSelectedDriver(selectedDriver: any){
@@ -136,6 +187,23 @@ export class ConditionsComponent {
 
   setSelectedReporter(selectedReporter: any){
     this.apiService.getQuery(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name).subscribe(QueryOBJ => {
+    this.Query = QueryOBJ
+    })
+  }
+
+  setSelectedOdorant(selectedOdorant: any){
+    this.apiService.getQuery(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name,this.selectedOdorant.name).subscribe(QueryOBJ => {
+    this.Query = QueryOBJ
+    });
+    this.apiService.getDilutions(this.selectedOR.name,this.selectedOdorant.name).subscribe(levelOBJ => {
+      for (let value of levelOBJ) {
+        this.Dilution_options.push({name: value as string})
+      }
+    });
+  }
+
+  setSelectedDilution(selectedDilution: any){
+    this.apiService.getQuery(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name,this.selectedOdorant.name,this.selectedDilution.name).subscribe(QueryOBJ => {
     this.Query = QueryOBJ
     })
   }
@@ -167,6 +235,14 @@ export class ConditionsComponent {
     const filterValue = name.toLowerCase();
     return this.Reporter_options.filter(option => option.name.toLowerCase().includes(filterValue));
   }
+  private _filterOdorant(name: string): User[] {
+    const filterValue = name.toLowerCase();
+    return this.Odorant_options.filter(option => option.name.toLowerCase().includes(filterValue));
+  }
+  private _filterDilution(name: string): User[] {
+    const filterValue = name.toLowerCase();
+    return this.Dilution_options.filter(option => option.name.toLowerCase().includes(filterValue));
+  }
 
   // Button
 
@@ -181,15 +257,15 @@ export class ConditionsComponent {
   table_formatted: any=null;
   table_raw: any=null;
   async postSamescale_plot() {
-    await this.apiService.getQuery(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name).subscribe(QueryOBJ => {
+    await this.apiService.getQuery(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name,this.selectedOdorant.name,this.selectedDilution.name).subscribe(QueryOBJ => {
     this.query = QueryOBJ
     });
 
-    await this.apiService.getDataTable(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name).subscribe((QueryOBJ) => {
+    await this.apiService.getDataTable(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name,this.selectedOdorant.name,this.selectedDilution.name).subscribe((QueryOBJ) => {
 	  this.table_formatted = QueryOBJ
     })
 
-    await this.apiService.getSameScalePlot(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name).subscribe((QueryOBJ) => {
+    await this.apiService.getSameScalePlot(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name,this.selectedOdorant.name,this.selectedDilution.name).subscribe((QueryOBJ) => {
 
     })
 
@@ -217,7 +293,7 @@ export class ConditionsComponent {
         }
 
   getDataTable(){
-    this.apiService.getDataTable(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name).subscribe((QueryOBJ) => {
+    this.apiService.getDataTable(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name,this.selectedOdorant.name,this.selectedDilution.name).subscribe((QueryOBJ) => {
 	  this.table_formatted = QueryOBJ
 	  const new_table = 'max_zscore,pulse_id,antenna_id,condition,odorant,OR,short_cond_name\n' + this.ConvertToCSV(QueryOBJ)
 	  const data: Blob = new Blob([new_table], {
@@ -228,7 +304,7 @@ export class ConditionsComponent {
   }
 
   getDataTableRaw(){
-    this.apiService.getDataTableRaw(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name).subscribe((QueryOBJ) => {
+    this.apiService.getDataTableRaw(this.selectedOR.name,this.selectedDriver.name,this.selectedReporter.name,this.selectedOdorant.name,this.selectedDilution.name).subscribe((QueryOBJ) => {
 	  this.table_raw = QueryOBJ
 	  const new_table = 'max_zscore,pulse_id,antenna_id,condition,odorant,OR,short_cond_name\n' + this.ConvertToCSV(QueryOBJ)
 	  const data: Blob = new Blob([new_table], {

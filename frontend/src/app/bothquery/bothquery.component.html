@@ -41,7 +41,29 @@
             </mat-form-field>
           </form>
 
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Odorant</mat-label>
+              <input type="text" matInput [formControl]="myControl_Odorant" [matAutocomplete]="auto4" [(ngModel)]="selectedOdorant">
+              <mat-autocomplete #auto4="matAutocomplete" [displayWith]="displayFn" >
+                <mat-option *ngFor="let option of filteredOdorant | async" [value]="option" (click)="setSelectedOdorant(selectedOdorant)">
+                  {{option.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
 
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Dilution</mat-label>
+              <input type="text" matInput [formControl]="myControl_Dilution" [matAutocomplete]="auto5" [(ngModel)]="selectedDilution">
+              <mat-autocomplete #auto5="matAutocomplete" [displayWith]="displayFn" >
+                <mat-option *ngFor="let option of filteredDilution | async" [value]="option" (click)="setSelectedDilution(selectedDilution)">
+                  {{option.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
 
           <button mat-raised-button color="primary" (click)="postSamescale_plot()">Submit</button>
         </div>

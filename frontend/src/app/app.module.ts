@@ -29,6 +29,8 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BothqueryComponent } from './bothquery/bothquery.component';
+
 
 const routes: Routes = [
   {
@@ -42,6 +44,10 @@ const routes: Routes = [
   {
     path: 'trials',
     component: TrialsComponent,
+  },
+  {
+    path: 'combined',
+    component: BothqueryComponent,
   }
 
 ];
@@ -54,6 +60,7 @@ const routes: Routes = [
     TrialsComponent,
     SideNavComponent,
     ConfigComponent,
+    BothqueryComponent,
 
   ],
   imports: [

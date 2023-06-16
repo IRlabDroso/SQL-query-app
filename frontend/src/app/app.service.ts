@@ -20,12 +20,16 @@ export class ApiService {
 
    getQuery(OR: any| null=null,
             Driver: any| null=null,
-            Reporter: any| null=null): Observable<any> {
+            Reporter: any| null=null,
+            Odorant: any| null=null,
+            Dilution: any| null=null): Observable<any> {
       const url = environment.back_end + "jobs/query"
       return this.http.get(url, {responseType: "json", params:{
       "OR": OR,
       "Driver": Driver,
       "Reporter": Reporter,
+      "Odorant": Odorant,
+      "Dilution": Dilution
       }})
    }
 
@@ -43,41 +47,65 @@ export class ApiService {
       const url = environment.back_end + "jobs/Reporters"
       return this.http.get(url, {responseType: "json"})
    };
-   getOdors(): Observable<any> {
-      const url = environment.back_end + "jobs/Odors"
-      return this.http.get(url, {responseType: "json"})
+
+   getOdorants(OR: any| null=null): Observable<any> {
+      const url = environment.back_end + "jobs/Odorants"
+      return this.http.get(url, {responseType: "json", params:{
+      "OR": OR
+      }})
+   };
+
+   getDilutions(OR: any| null=null,
+                Odorant: any| null=null): Observable<any> {
+      const url = environment.back_end + "jobs/Dilutions"
+      return this.http.get(url, {responseType: "json", params:{
+      "OR": OR,
+      "Odorant": Odorant
+      }})
    };
 
    getSameScalePlot(OR: any| null=null,
                     Driver: any| null=null,
-                    Reporter: any| null=null): Observable<any> {
+                    Reporter: any| null=null,
+                    Odorant: any| null=null,
+                    Dilution: any| null=null): Observable<any> {
       const url = environment.back_end + "jobs/SameScalePlot"
       return this.http.get(url, {responseType: "json", params:{
       "OR": OR,
       "Driver": Driver,
       "Reporter": Reporter,
+      "Odorant": Odorant,
+      "Dilution": Dilution
       }})
    };
 
    getDataTable(OR: any| null=null,
                     Driver: any| null=null,
-                    Reporter: any| null=null): Observable<any> {
+                    Reporter: any| null=null,
+                    Odorant: any| null=null,
+                    Dilution: any| null=null): Observable<any> {
       const url = environment.back_end + "jobs/DataTable"
       return this.http.get(url, {responseType: "json", params:{
       "OR": OR,
       "Driver": Driver,
       "Reporter": Reporter,
+      "Odorant": Odorant,
+      "Dilution": Dilution
       }})
    };
 
    getDataTableRaw(OR: any| null=null,
                     Driver: any| null=null,
-                    Reporter: any| null=null): Observable<any> {
+                    Reporter: any| null=null,
+                    Odorant: any| null=null,
+                    Dilution: any| null=null): Observable<any> {
       const url = environment.back_end + "jobs/DataTableRaw"
       return this.http.get(url, {responseType: "json", params:{
       "OR": OR,
       "Driver": Driver,
       "Reporter": Reporter,
+      "Odorant": Odorant,
+      "Dilution": Dilution
       }})
    };
 

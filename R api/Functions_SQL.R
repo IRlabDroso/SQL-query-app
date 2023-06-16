@@ -636,11 +636,15 @@ create_pdf = function(csv_DF,odorant,z_score = F,name_file,n_pulse){
 
 samescale_summary = function(for_resume_final,without_water=F){
   ### Create short conditions names ###
-  cond_names =lapply(strsplit(as.character(levels(for_resume_final$conditions)),"[_]"), `[`, c(1,7,8))
+  cond_names =lapply(strsplit(for_resume_final$conditions,"[_]"), `[`, c(1,7,8))
   short_cond_names = sapply(cond_names,function(x) paste(unlist(x, use.names = TRUE), collapse = "_"))
+ 
+  short_cond_names = paste(short_cond_names,for_resume_final$exp_id,sep = "_")
+  
   #levels(for_resume_final$conditions) = short_cond_names
-  for_resume_final$short_cond_names = for_resume_final$conditions
-  levels(for_resume_final$short_cond_names) = short_cond_names
+  for_resume_final$short_cond_names = as.factor(short_cond_names)
+  levels(for_resume_final$short_cond_names) = unique(short_cond_names)
+  print(for_resume_final$short_cond_names)
   
   ### get the remarks is some exist ###
   #exp.info = Read_Exp_info()$exp_info
@@ -650,11 +654,14 @@ samescale_summary = function(for_resume_final,without_water=F){
   for_resume_final$odorant = factor(for_resume_final$odorant,levels = unique(for_resume_final$odorant))
   levels(for_resume_final$variable) = c(1:length(levels(for_resume_final$variable)))
   
+  print(table(for_resume_final$short_cond_names))
   ### eliminates duplicates ###
   for_resume_final = unique(for_resume_final)
   
   ### generate samescale plot ###
   png("../frontend/src/assets/images/samescale_summary_1.png",width = 18,height = 15,units = "in",res=100)
+  
+  
   print(ggplot(for_resume_final,aes(short_cond_names,max_zscore,fill=short_cond_names))+
           geom_boxplot()+
           theme(axis.text.x = element_text(angle=45,hjust=1),
@@ -664,7 +671,7 @@ samescale_summary = function(for_resume_final,without_water=F){
                 legend.direction="horizontal",
                 axis.text = element_text(size=20),
                 strip.text = element_text(size=30),
-                strip.text.x = element_text(angle=45),
+                strip.text.x = element_text(angle=90),
                 strip.background = element_blank(),
                 legend.text = element_text(size=20),
                 axis.title = element_text(size=20))+
@@ -699,12 +706,12 @@ samescale_summary = function(for_resume_final,without_water=F){
     if(i == 1){
       p = ggplot(color,aes(variable,max_zscore,fill=score))+
         geom_boxplot()+
-        ylab(paste(levels(for_resume_final$short_cond_names)[i],remarks[i],sep="\n"))+
+        ylab(levels(for_resume_final$short_cond_names)[i])+
         scale_y_continuous(limits = c(-1,max_value))+
         theme(axis.title.x = element_blank(),
               axis.text = element_text(size=20),
               strip.text = element_text(size=30),
-              strip.text.x = element_text(angle=45),
+              strip.text.x = element_text(angle=90),
               strip.background = element_blank(),
               legend.text = element_text(size=20),
               axis.title = element_text(size=20),
@@ -715,7 +722,7 @@ samescale_summary = function(for_resume_final,without_water=F){
       p = ggplot(color,aes(variable,max_zscore,fill=score))+
         geom_boxplot()+
         scale_y_continuous(limits = c(-1,max_value))+
-        ylab(paste(levels(for_resume_final$short_cond_names)[i],remarks[i],sep="\n"))+
+        ylab(levels(for_resume_final$short_cond_names)[i])+
         theme(axis.title.x = element_blank(),
               strip.background = element_blank(),
               strip.text.x = element_blank(),

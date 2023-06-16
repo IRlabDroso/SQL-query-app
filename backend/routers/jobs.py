@@ -11,18 +11,18 @@ async def get_job():
     test = ["12","32"]
     res = requests.post("http://127.0.0.1:11004/Read_exp_info", params={
     }).json()
-    print(res)
     return res
 
 
 @router.get('/query')
-async def get_job(OR: str = None, Driver: str = None, Reporter: str = None):
+async def get_job(OR: str = None, Driver: str = None, Reporter: str = None, Odorant: str = None, Dilution: str = None):
     res = requests.post("http://127.0.0.1:11004/getQuery", params={
         "OR": OR,
         "Driver": Driver,
-        "Reporter": Reporter
+        "Reporter": Reporter,
+        "Odorant": Odorant,
+        "Dilution": Dilution
     }).json()
-    print(res)
     return res
 
 
@@ -47,38 +47,57 @@ async def get_job():
     }).json()
     return res
 
-@router.get('/Odors')
-async def get_job():
+@router.get('/Odorants')
+async def get_job(OR: str = None):
     res = requests.post("http://127.0.0.1:11004/getLevels", params={
-        "column": "odor"
+        "column": "odor",
+        "OR": OR
+    }).json()
+    return res
+
+@router.get('/Dilutions')
+async def get_job(OR: str = None, Odorant: str = None):
+    res = requests.post("http://127.0.0.1:11004/getLevels", params={
+        "column": "dilution",
+        "OR": OR,
+        "Odorant": Odorant
     }).json()
     return res
 
 @router.get('/SameScalePlot')
-async def get_job(OR: str = None, Driver: str = None, Reporter: str = None):
-    res = requests.post("http://127.0.0.1:11004/getSamescale", params={
-        "OR": OR,
-        "Driver": Driver,
-        "Reporter": Reporter
-    }).json()
-    return res
-
-@router.get('/DataTable')
-async def get_job(OR: str = None, Driver: str = None, Reporter: str = None, export: bool= True):
+async def get_job(OR: str = None, Driver: str = None, Reporter: str = None, Odorant: str = None, Dilution: str = None):
+    print(Odorant)
     res = requests.post("http://127.0.0.1:11004/getSamescale", params={
         "OR": OR,
         "Driver": Driver,
         "Reporter": Reporter,
+        "Odorant": Odorant,
+        "Dilution": Dilution
+    }).json()
+    return res
+
+@router.get('/DataTable')
+async def get_job(OR: str = None, Driver: str = None, Reporter: str = None, Odorant: str = None, Dilution: str = None, export: bool= True):
+    print(Odorant)
+    res = requests.post("http://127.0.0.1:11004/getSamescale", params={
+        "OR": OR,
+        "Driver": Driver,
+        "Reporter": Reporter,
+        "Odorant": Odorant,
+        "Dilution": Dilution,
         "export": export,
     }).json()
     return res
 
 @router.get('/DataTableRaw')
-async def get_job(OR: str = None, Driver: str = None, Reporter: str = None, export: bool= True, raw: bool=True ):
+async def get_job(OR: str = None, Driver: str = None, Reporter: str = None, Odorant: str = None, Dilution: str = None, export: bool= True, raw: bool=True ):
+    print(Odorant)
     res = requests.post("http://127.0.0.1:11004/getSamescale", params={
         "OR": OR,
         "Driver": Driver,
         "Reporter": Reporter,
+        "Odorant": Odorant,
+        "Dilution": Dilution,
         "export": export,
         "raw": raw,
     }).json()
