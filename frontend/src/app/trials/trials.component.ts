@@ -150,7 +150,7 @@ export class TrialsComponent {
   table_formatted: any=null;
   table_raw: any=null;
   async postSamescale_plot() {
-    await this.apiService.getQuery(this.selectedOdorant.name,this.selectedDilution.name).subscribe(QueryOBJ => {
+    await this.apiService.getQueryOdorant(this.selectedOdorant.name,this.selectedDilution.name).subscribe(QueryOBJ => {
     this.query = QueryOBJ
     });
 

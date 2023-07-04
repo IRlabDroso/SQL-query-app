@@ -90,7 +90,8 @@ getQuery = function(OR =NULL,Driver=NULL,Reporter=NULL,Odorant=NULL,Dilution=NUL
   reporter_query = c()
   odorant_query = c()
   dilution_query = c()
-  
+  print(Driver)
+  print(Dilution)
   if(!is.null(OR) & OR != "null"){
     or_query = paste0(" AND ci.olfactory_receptor IN (",paste(paste0("'",OR,"'"),collapse = ","),")")
   }

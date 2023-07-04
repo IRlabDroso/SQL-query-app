@@ -33,6 +33,15 @@ export class ApiService {
       }})
    }
 
+   getQueryOdorant(Odorant: any| null=null,
+                   Dilution: any| null=null): Observable<any> {
+      const url = environment.back_end + "jobs/query"
+      return this.http.get(url, {responseType: "json", params:{
+      "Odorant": Odorant,
+      "Dilution": Dilution
+      }})
+   }
+
    getORs(): Observable<any> {
       const url = environment.back_end + "jobs/ORs"
       return this.http.get(url, {responseType: "json"})
